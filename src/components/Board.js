@@ -33,11 +33,17 @@ const Board = () => {
 	const handleClick = (e) => {
 		let temp = [...state]
 		temp[e.target.value] = player
+		console.log('temp: ', temp);
+		
 		setState(temp)
 		setStep(step + 1)
 		// setBoardHistory(prevState => ([...prevState, state]))
-		console.log(state)
-		// console.log(boardHistory)
+		
+		// 
+		
+	}
+
+	React.useEffect(() => {
 		let res = checkWinner()
 		if (!res && step !== 8) {
 			player === 'X' ? setPlayer('O') : setPlayer('X')
@@ -47,41 +53,41 @@ const Board = () => {
 		}
 		else {
 			setWinner(`Winner: Player ${res}`)
-			console.log('winner', winner)
+			
 		}
-	}
-
+	}, [state])
+	
 	const onRestart = () => {
 		setState(() => Array(9).fill(''))
 		setBoardHistory([state])
-		console.log('Restart', state)
+		
 		setStep(0)
 		setWinner('')
 		setPlayer('X')
 	}
 
-	// const jumpTo = (jumpStep) => {
-	// const tempStep = step;
-	// 	const stepDiff = tempStep - jumpStep
-	// 	setBoardHistory(prevState => {
-	// 		let tempHist = [...prevState];
-	// 		tempHist.splice(tempHist.length - stepDiff, stepDiff)
-	// 		return tempHist
-	// 	})
-	// 	console.log('jumpTo', boardHistory);
-	// 	setStep(jumpStep);
-	// 	step % 2 === 0 ? setPlayer('X') : setPlayer('O');
-	// 	setWinner('')
-	// }
+	const jumpTo = (jumpStep) => {
+	const tempStep = step;
+		const stepDiff = tempStep - jumpStep
+		setBoardHistory(prevState => {
+			let tempHist = [...prevState];
+			tempHist.splice(tempHist.length - stepDiff, stepDiff)
+			return tempHist
+		})
+		
+		setStep(jumpStep);
+		step % 2 === 0 ? setPlayer('X') : setPlayer('O');
+		setWinner('')
+	}
 
-	// const moves = boardHistory.map((step, move) => {
-	// 	const dest = move ? `#${move}` : "0";
-	// 	return (
-	// 		// <li className="mx-2" key={move} style={{ listStyle: 'none' }}>
-	// 		<button key={move} className='btn btn-sm text-info btn-dark m-2 d-flex align-items-center' style={{ height: '28px', borderRadius: '18px' }} onClick={() => jumpTo(move)}>{dest}</button>
-	// 		// </li>
-	// 	)
-	// });
+	const moves = boardHistory.map((step, move) => {
+		const dest = move ? `#${move}` : "0";
+		return (
+			// <li className="mx-2" key={move} style={{ listStyle: 'none' }}>
+			<button key={move} className='btn btn-sm text-info btn-dark m-2 d-flex align-items-center' style={{ height: '28px', borderRadius: '18px' }} onClick={() => jumpTo(move)}>{dest}</button>
+			// </li>
+		)
+	});
 
 	return (
 		<div className='boardWrapper'>
@@ -95,9 +101,9 @@ const Board = () => {
 				})}
 			</div>
 			<button className="btn btn-info my-3" onClick={onRestart}>Restart</button>
-			{/* <div className="d-flex flex-wrap justify-content-center p-1 m-2">
+			<div className="d-flex flex-wrap justify-content-center p-1 m-2">
 				{moves}
-			</div> */}
+			</div>
 		</div>
 	)
 }
