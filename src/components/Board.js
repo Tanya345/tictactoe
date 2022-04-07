@@ -1,12 +1,11 @@
 import React, { useState, useRef } from 'react'
-import Box from './Box'
 
 let arr = ['', '', '', '', '', '', '', '', '']
 const Board = () => {
 	const [state, setState] = useState(() => Array(9).fill(''))
-	const [boardHistory, setBoardHistory] = useState([state])
+	// const [boardHistory, setBoardHistory] = useState([state])
 	const [step, setStep] = useState(0)
-	const [player, setPlayer] = useState('X')
+	const [player, setPlayer] = useState('O')
 	const [winner, setWinner] = useState('')
 	const [status, setStatus] = useState('')
 
@@ -33,14 +32,13 @@ const Board = () => {
 	const handleClick = (e) => {
 		let temp = [...state]
 		temp[e.target.value] = player
-		console.log('temp: ', temp);
-		
+		// console.log('temp: ', temp);
+
 		setState(temp)
 		setStep(step + 1)
-		// setBoardHistory(prevState => ([...prevState, state]))
-		
-		// 
-		
+		// setBoardHistory(prevState => ([...prevState, temp]))
+	    // console.log(boardHistory)
+
 	}
 
 	React.useEffect(() => {
@@ -53,57 +51,35 @@ const Board = () => {
 		}
 		else {
 			setWinner(`Winner: Player ${res}`)
-			
+
 		}
-	}, [state])
-	
+	}, [state, step])
+
 	const onRestart = () => {
 		setState(() => Array(9).fill(''))
-		setBoardHistory([state])
-		
+		// setBoardHistory([state])
+
 		setStep(0)
 		setWinner('')
-		setPlayer('X')
+		setPlayer('O')
 	}
 
-	const jumpTo = (jumpStep) => {
-	const tempStep = step;
-		const stepDiff = tempStep - jumpStep
-		setBoardHistory(prevState => {
-			let tempHist = [...prevState];
-			tempHist.splice(tempHist.length - stepDiff, stepDiff)
-			return tempHist
-		})
-		
-		setStep(jumpStep);
-		step % 2 === 0 ? setPlayer('X') : setPlayer('O');
-		setWinner('')
-	}
-
-	const moves = boardHistory.map((step, move) => {
-		const dest = move ? `#${move}` : "0";
-		return (
-			// <li className="mx-2" key={move} style={{ listStyle: 'none' }}>
-			<button key={move} className='btn btn-sm text-info btn-dark m-2 d-flex align-items-center' style={{ height: '28px', borderRadius: '18px' }} onClick={() => jumpTo(move)}>{dest}</button>
-			// </li>
-		)
-	});
 
 	return (
 		<div className='boardWrapper'>
-			{(!winner && step <= 8) ? <h2 className='text-light'>It's you turn Player <span>{player}</span> </h2> : <h2 className='text-light'>{winner || status} </h2>}
+			{(!winner && step <= 8) ? <h2 className='text-light'>It's your turn Player <span>{player}</span> </h2> : <h2 className='text-light'>{winner || status} </h2>}
 
 			<div className="boxWrapper">
 				{state.map((e, i) => {
 					return (
-						<button key={i} className='box' value={i} disabled={e} onClick={handleClick}>{e}</button>
+						<button key={i} className='box' value={i} disabled={e || winner} onClick={handleClick}>{e}</button>
 					)
 				})}
 			</div>
-			<button className="btn btn-info my-3" onClick={onRestart}>Restart</button>
-			<div className="d-flex flex-wrap justify-content-center p-1 m-2">
+			<button className="btn btn-info my-3" disabled={state.every((e)=>e==='')} onClick={onRestart}>Restart</button>
+			{/* <div className="d-flex flex-wrap justify-content-center p-1 m-2">
 				{moves}
-			</div>
+			</div> */}
 		</div>
 	)
 }
