@@ -37,7 +37,7 @@ const Board = () => {
 		setState(temp)
 		setStep(step + 1)
 		// setBoardHistory(prevState => ([...prevState, temp]))
-	    // console.log(boardHistory)
+		// console.log(boardHistory)
 
 	}
 
@@ -64,6 +64,29 @@ const Board = () => {
 		setPlayer('O')
 	}
 
+	// const jumpTo = (jumpStep) => {
+	// 	const tempStep = step;
+	// 	const stepDiff = tempStep - jumpStep
+	// 	setBoardHistory(prevState => {
+	// 		let tempHist = [...prevState];
+	// 		tempHist.splice(tempHist.length - stepDiff, stepDiff)
+	// 		return tempHist
+	// 	})
+
+	// 	setStep(jumpStep);
+	// 	step % 2 === 0 ? setPlayer('X') : setPlayer('O');
+	// 	setWinner('')
+	// }
+
+	// const moves = boardHistory.map((step, move) => {
+	// 	const dest = move ? `#${move}` : "0";
+	// 	return (
+	// 		// <li className="mx-2" key={move} style={{ listStyle: 'none' }}>
+	// 		<button key={move} className='btn btn-sm text-info btn-dark m-2 d-flex align-items-center' style={{ height: '28px', borderRadius: '18px' }} onClick={() => jumpTo(move)}>{dest}</button>
+	// 		// </li>
+	// 	)
+	// });
+
 
 	return (
 		<div className='boardWrapper'>
@@ -76,7 +99,7 @@ const Board = () => {
 					)
 				})}
 			</div>
-			<button className="btn btn-info my-3" disabled={state.every((e)=>e==='')} onClick={onRestart}>Restart</button>
+			<button className="btn btn-info my-3" disabled={state.every((e) => e === '')} onClick={onRestart}>Restart</button>
 			{/* <div className="d-flex flex-wrap justify-content-center p-1 m-2">
 				{moves}
 			</div> */}
